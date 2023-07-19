@@ -1,0 +1,141 @@
+import logo from './logo.svg';
+import './App.css';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+
+function App() {
+
+  const [text,setText] = React.useState('');
+  const [textArr,setTextArr] = React.useState([{
+    Name: '',
+    check: false
+  }]);
+  const [mystyle,setMystyle] = React.useState({
+    textDecorationLine: 'none'
+  })
+   const [check,setCheck] = React.useState(false);
+ 
+  const [count,setCount] = React.useState(0);
+
+  function textHandler(){
+
+    if(textArr.Name!==''){
+
+      textArr.push(text);
+      setTextArr([...textArr]);
+      setText('');
+
+      console.log(textArr.Name);
+      
+    }
+   
+    }
+
+    function dltHandler(index){
+     for(var i=0;i<textArr.length;i++){
+      if(index===i){
+        textArr.splice(i,1);
+     }
+     
+    }
+
+    setTextArr([...textArr]);
+  }
+
+  function newHandler(){
+    setCheck(true);
+  }
+
+  function doneHandler(index){
+
+    for(var i=0;i<textArr.length;i++){
+      if(index===i){
+
+        setCheck(true);
+        
+    if(count%2===0){ 
+      setMystyle({
+      textDecorationLine: 'line-through'
+    })
+
+    setCount(count+1);
+  }
+
+  else if(count%2!==0){
+    setMystyle({
+      textDecorationLine: 'none'
+    })
+
+    setCount(count+1);
+
+  }
+
+     }
+    }
+
+   
+  }
+
+  return (
+    <div className="App">
+     <h1 style={{color: "rgb(255, 0, 0)"}}>Todo List</h1>
+     <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
+        <TextField
+          required
+          id="outlined-required"
+          label="Enter some item"
+          className='field'
+          value={textArr.Name}
+          onChange={(e) => setTextArr.Name(e.target.value)}
+          
+        />
+        <AddCircleOutlineRoundedIcon onClick={textHandler} className='add'/>
+        </div>
+
+        <div className='card'>
+
+          {textArr.map((elem,index)=>{
+            return (
+              <Card sx={{ maxWidth: 400 }} style={{margin: '10px'}} key={index}>
+              <CardActionArea>
+               
+                <CardContent>
+                  
+                  <Typography variant="body2" color="text.secondary" >
+                   {elem}
+                   <DeleteIcon className='dlt' onClick={()=>{dltHandler(index)}}/>
+                   <DoneAllIcon className='done' />
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+            )
+          })}
+
+        </div>
+
+
+
+        </Box>
+    </div>
+  );
+}
+
+export default App;
