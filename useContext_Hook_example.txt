@@ -1,0 +1,174 @@
+index.js//
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { Text } from './Navbar';
+import { NoteProvider } from './About';
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <NoteProvider>
+      <Text>
+        <App />
+      </Text>
+    </NoteProvider>
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+
+//App.js
+
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import NavbarComp from "./Navbar";
+import About from "./About";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { TextContext } from "./Navbar";
+import User from "./User";
+
+function App() {
+  return (
+
+    <BrowserRouter>
+      <>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="about" element={<About />} />
+        </Routes>
+
+      </>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+
+//Home.js
+
+import React, { useContext, useState } from 'react';
+import { TextContext } from './Navbar';
+import NavbarComp from './Navbar';
+import { NoteContext } from './About';
+
+const Home = () => {
+  const [val, Update] = useContext(TextContext);
+  const n = useContext(NoteContext)
+
+  const clickHandler = () => {
+    Update(); // Call the Update function
+  };
+
+  return (
+    <>
+      <NavbarComp />
+      <h1>{val}</h1>
+      <h2 style={{color: "red"}}>{n}</h2>
+      <button onClick={clickHandler}>Click</button>
+    </>
+  );
+};
+
+export default Home;
+
+
+//About.js
+
+import { useContext, createContext, useState } from "react";
+import NavbarComp from "./Navbar";
+import { TextContext } from "./Navbar";
+
+export const NoteContext = createContext();
+
+
+export const NoteProvider = (props) =>{
+    const [notes,setNotes] = useState("Notes")
+
+    return(
+        <NoteContext.Provider value={notes}>
+            {props.children}
+        </NoteContext.Provider>
+    )
+
+}
+
+const About = () => {
+
+    const a = useContext(TextContext)
+    const [notes,setNotes] = useState("Notes")
+    return (
+        <>
+            <NavbarComp />
+            <h1>This is about us page of iNotebook to store</h1>
+            <h2>{a}</h2>
+        </>
+
+    )
+}
+
+export default About;
+
+//Navbar.js
+
+// Navbar.js
+import React, { useState, createContext, useContext } from 'react';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import { Link } from 'react-router-dom';
+
+export const TextContext = createContext();
+
+export const Text = (Props) =>{
+
+  const [val,setVal] = useState("Checking")
+
+  const Update =()=>{
+    alert("Clieckd")
+  }
+
+  return(
+    <TextContext.Provider value={[val,Update]}>
+      {Props.children}
+    </TextContext.Provider>
+  )
+
+}
+
+
+function NavbarComp() {
+ 
+ 
+
+  return (
+    
+      <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar expand="lg" className="bg-body-tertiary">
+          <Container>
+            <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link as={Link} to="/">Home</Nav.Link>
+                <Nav.Link as={Link} to="/about">About</Nav.Link>
+                <Nav.Link>Contact</Nav.Link>
+
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      </Navbar>
+   
+  );
+}
+
+export default NavbarComp;
